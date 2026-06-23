@@ -1,0 +1,39 @@
+{
+  "miembros": [
+    {
+      "nombre": "Incógnito",
+      "apodo": "Kirito",
+      "descripcion": "Le encanta Hollow Knight, otaku al 1000% y ama las tortas de Sauces",
+      "imagen": null
+    },
+    {
+      "nombre": "Josué Rivas",
+      "apodo": "cofue",
+      "descripcion": "Toma más café que agua, le encanta dormir y se estresa facilmente",
+      "imagen": null
+    },
+    {
+      "nombre": "Michael Rosas",
+      "apodo": "Maiki",
+      "descripcion": "Con cara de culpable es el que no le tiene miedo a la funa, dice las cosas al toque",
+      "imagen": null
+    },
+    {
+      "nombre": "Santiago",
+      "apodo": "ExinNova",
+      "descripcion": "Tlapa lo odia, Muñoz lo odia, Guardiola lo odia... Odiado por muchos, amado por pocos",
+      "imagen": null
+    },
+    {
+      "nombre": "Angel Eliasib",
+      "apodo": "eliasib",
+      "descripcion": "Una vez proyectó por accidente una pagina usando ChatGPT para la exposición en su exposición",
+      "imagen": null
+    }, {
+      "nombre": "Ricardo Barradas",
+      "apodo": "riangel",
+      "descripcion": "Es el linuxero mayor, habla poco pero cuando lo hace tira puro facto",
+      "imagen": null
+    }
+  ]
+}
