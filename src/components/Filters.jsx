@@ -1,11 +1,22 @@
+import { Search } from 'lucide-react'
 import styles from './Filters.module.css'
 
-export default function Filters({ semestres, filters, onChange, total }) {
+export default function Filters({ semestres, filters, onChange, total, search, onSearchChange }) {
   return (
     <section className={styles.filters}>
       <div className={styles.inner}>
 
         <div className={styles.left}>
+          <div className={styles.searchGroup}>
+            <Search size={15} className={styles.searchIcon} />
+            <input
+              className={styles.searchInput}
+              placeholder="Buscar frase…"
+              value={search}
+              onChange={e => onSearchChange(e.target.value)}
+            />
+          </div>
+
           {/* Tipo */}
           <div className={styles.group}>
             <span className={styles.label}>tipo</span>

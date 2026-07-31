@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styles from './Header.module.css'
 
 export default function Header({ vista, onVista }) {
@@ -13,26 +14,14 @@ export default function Header({ vista, onVista }) {
         </div>
 
         <nav className={styles.nav}>
-          <button
-            className={`${styles.navBtn} ${vista === 'frases' ? styles.navActive : ''}`}
-            onClick={() => onVista('frases')}
-          >
+          <button className={`${styles.navBtn} ${vista === 'frases' ? styles.navActive : ''}`} onClick={() => onVista('frases')}>
             Frases
           </button>
-          <button
-            className={`${styles.navBtn} ${vista === 'conocenos' ? styles.navActive : ''}`}
-            onClick={() => onVista('conocenos')}
-          >
+          <button className={`${styles.navBtn} ${vista === 'conocenos' ? styles.navActive : ''}`} onClick={() => onVista('conocenos')}>
             Conócenos
           </button>
-          <a
-            href="https://google.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.discordBtn}
-          >
-            Discord
-          </a>
+          <Link to="/panel" className={styles.navBtn}>Panel</Link>
+          <a href="https://google.com" target="_blank" rel="noopener noreferrer" className={styles.discordBtn}>Discord</a>
         </nav>
       </div>
     </header>
