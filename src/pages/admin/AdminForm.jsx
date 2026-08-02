@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Select from '../../components/admin/Select'
 import formStyles from './FraseForm.module.css'
+import PasswordInput from '../../components/admin/PasswordInput'
 
 const ROLE_OPTIONS = [
   { value: 'admin', label: 'Admin — CRUD frases y autores' },
@@ -44,9 +45,8 @@ export default function AdminForm({ admin, onSave, onCancel, onDelete, busy, cur
 
       <label className={formStyles.label}>
         {admin ? 'Nueva contraseña (dejar vacío para no cambiarla)' : 'Contraseña'}
-        <input
+        <PasswordInput
           className={formStyles.input}
-          type="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
           autoComplete="new-password"

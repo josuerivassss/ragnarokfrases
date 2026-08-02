@@ -1,4 +1,7 @@
 .card {
+  width: 100%;
+  box-sizing: border-box;
+  align-self: stretch;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;

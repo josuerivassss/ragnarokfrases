@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { listMiembros, saveMiembro, deleteMiembro } from '../../lib/adminApi'
+import Modal from '../../components/admin/Modal'
+import ConfirmDialog from '../../components/admin/ConfirmDialog'
 import MiembroForm from './MiembroForm'
 import styles from './FrasesAdminPage.module.css'
 
@@ -7,6 +9,7 @@ export default function MiembrosAdminPage() {
   const [miembros, setMiembros] = useState([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(undefined)
+  const [deleteTarget, setDeleteTarget] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
@@ -36,11 +39,11 @@ export default function MiembrosAdminPage() {
     }
   }
 
-  async function handleDelete(id) {
-    if (!confirm('¿Eliminar este miembro?')) return
+  async function confirmDelete() {
     setBusy(true); setError('')
     try {
-      await deleteMiembro(id)
+      await deleteMiembro(deleteTarget)
+      setDeleteTarget(null)
       setEditing(undefined)
       await reload()
     } catch (err) {
@@ -54,22 +57,29 @@ export default function MiembrosAdminPage() {
     <div>
       <div className={styles.header}>
         <h1 className={styles.title}>Miembros</h1>
-        {editing === undefined && (
-          <button className={styles.newBtn} onClick={() => setEditing(null)}>+ Nuevo miembro</button>
-        )}
+        <button className={styles.newBtn} onClick={() => setEditing(null)}>+ Nuevo miembro</button>
       </div>
 
       {error && <p className={styles.error}>{error}</p>}
 
-      {editing !== undefined && (
+      <Modal open={editing !== undefined} onClose={() => setEditing(undefined)}>
         <MiembroForm
           miembro={editing}
           busy={busy}
           onSave={handleSave}
-          onDelete={handleDelete}
+          onDelete={id => setDeleteTarget(id)}
           onCancel={() => setEditing(undefined)}
         />
-      )}
+      </Modal>
+
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="Eliminar miembro"
+        message="¿Seguro que quieres eliminar este miembro?"
+        busy={busy}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
 
       {loading ? (
         <p className={styles.hint}>Cargando…</p>
@@ -87,7 +97,7 @@ export default function MiembrosAdminPage() {
                 className={styles.deleteIcon}
                 title="Eliminar miembro"
                 aria-label="Eliminar miembro"
-                onClick={() => handleDelete(m.id)}
+                onClick={() => setDeleteTarget(m.id)}
                 disabled={busy}
               >
                 ✕

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import styles from './LoginPage.module.css'
+import PasswordInput from '../../components/admin/PasswordInput'
 
 export default function LoginPage() {
   const { login } = useAuth()
@@ -47,14 +48,13 @@ export default function LoginPage() {
 
         <label className={styles.label}>
           Contraseña
-          <input
-            className={styles.input}
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            autoComplete="current-password"
-            required
-          />
+          <PasswordInput
+          className={styles.input}
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          autoComplete="current-password"
+          required
+        />
         </label>
 
         {error && <p className={styles.error}>{error}</p>}
