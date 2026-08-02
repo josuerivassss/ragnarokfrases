@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { listFrasesPublicas } from './lib/publicApi'
 import Header from './components/Header'
 import Filters from './components/Filters'
 import FrasesGrid from './components/FrasesGrid'
 import ConocenosView from './components/ConocenosView'
 import Footer from './components/Footer'
+import LoadingScreen from './components/LoadingScreen'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 import AdminLayout from './components/admin/AdminLayout'
@@ -14,6 +15,8 @@ import FrasesAdminPage from './pages/admin/FrasesAdminPage'
 import AutoresAdminPage from './pages/admin/AutoresAdminPage'
 import MiembrosAdminPage from './pages/admin/MiembrosAdminPage'
 import AdminsAdminPage from './pages/admin/AdminsAdminPage'
+
+const LOADING_MS = 3000
 
 function SitioPublico() {
   const [vista, setVista] = useState('frases')
@@ -80,35 +83,55 @@ function SitioPublico() {
   )
 }
 
+function AppShell() {
+  const location = useLocation()
+  const [showLoader, setShowLoader] = useState(true)
+
+  useEffect(() => {
+    setShowLoader(true)
+    const t = setTimeout(() => setShowLoader(false), LOADING_MS)
+    return () => clearTimeout(t)
+  }, [location.pathname])
+
+  return (
+    <>
+      {showLoader && <LoadingScreen duration={LOADING_MS} />}
+      <div style={{ visibility: showLoader ? 'hidden' : 'visible' }}>
+        <Routes>
+          <Route path="/" element={<SitioPublico />} />
+
+          <Route path="/panel/login" element={<LoginPage />} />
+          <Route
+            path="/panel"
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Navigate to="frases" replace />} />
+            <Route path="frases" element={<FrasesAdminPage />} />
+            <Route path="autores" element={<AutoresAdminPage />} />
+            <Route path="miembros" element={<MiembrosAdminPage />} />
+            <Route
+              path="admins"
+              element={
+                <ProtectedRoute ownerOnly>
+                  <AdminsAdminPage />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+        </Routes>
+      </div>
+    </>
+  )
+}
+
 export default function App() {
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/" element={<SitioPublico />} />
-
-        <Route path="/panel/login" element={<LoginPage />} />
-        <Route
-          path="/panel"
-          element={
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Navigate to="frases" replace />} />
-          <Route path="frases" element={<FrasesAdminPage />} />
-          <Route path="autores" element={<AutoresAdminPage />} />
-          <Route path="miembros" element={<MiembrosAdminPage />} />
-          <Route
-            path="admins"
-            element={
-              <ProtectedRoute ownerOnly>
-                <AdminsAdminPage />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-      </Routes>
+      <AppShell />
     </AuthProvider>
   )
 }
