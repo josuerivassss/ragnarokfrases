@@ -3,6 +3,7 @@ import { listAdmins, saveAdmin, deleteAdmin } from '../../lib/adminApi'
 import { useAuth } from '../../context/AuthContext'
 import Modal from '../../components/admin/Modal'
 import ConfirmDialog from '../../components/admin/ConfirmDialog'
+import CredentialsModal from '../../components/admin/CredentialsModal'
 import AdminForm from './AdminForm'
 import styles from './FrasesAdminPage.module.css'
 
@@ -12,6 +13,7 @@ export default function AdminsAdminPage() {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(undefined)
   const [deleteTarget, setDeleteTarget] = useState(null)
+  const [newCredentials, setNewCredentials] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
@@ -33,6 +35,11 @@ export default function AdminsAdminPage() {
     try {
       await saveAdmin(payload)
       setEditing(undefined)
+      // Solo mostramos el popup de credenciales si de verdad hubo contraseña
+      // (creación nueva, o edición donde se escribió una contraseña nueva).
+      if (payload.password) {
+        setNewCredentials({ username: payload.username, password: payload.password })
+      }
       await reload()
     } catch (err) {
       setError(err.message)
@@ -82,6 +89,12 @@ export default function AdminsAdminPage() {
         busy={busy}
         onConfirm={confirmDelete}
         onCancel={() => setDeleteTarget(null)}
+      />
+
+      <CredentialsModal
+        open={newCredentials !== null}
+        credentials={newCredentials}
+        onClose={() => setNewCredentials(null)}
       />
 
       {loading ? (
